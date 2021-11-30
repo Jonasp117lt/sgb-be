@@ -2,7 +2,7 @@
   "name": "sgb-be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://gitlab.com/jonasp117lt/sgb-be/issues"
   },
-  "homepage": "https://gitlab.com/jonasp117lt/sgb-be#readme"
+  "homepage": "https://gitlab.com/jonasp117lt/sgb-be#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.9.0"
+  }
 }
