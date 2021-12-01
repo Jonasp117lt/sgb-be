@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = (app, protectedRoutes) => {
     const books = require("../controllers/book.controller.js")
 
     let router = require('express').Router();
@@ -18,5 +18,5 @@ module.exports = app => {
     // Delete a Book with id
     router.delete("/:id", books.delete);
 
-    app.use('/api/books', router);
+    app.use('/api/books', protectedRoutes, router);
 }

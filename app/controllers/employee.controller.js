@@ -1,5 +1,5 @@
 const db = require("../models");
-const Customer = db.customers;
+const Employee = db.employees;
 const Person = db.persons;
 
 const requiredPersonFields = [
@@ -9,13 +9,25 @@ const requiredPersonFields = [
     { key: 'phone', name: 'Teléfono' },
 ]
 
+const requiredFields = [
+    { key: 'username', name: 'Nombre de usuario' },
+    { key: 'password', name: 'Contraseña' },
+    { key: 'confirm_password', name: 'Contraseña repetida' },
+
+]
+
 //Crear y guardar un nuevo cliente
 exports.create = async (req, res, next) => {
     //Registrar primero a la persona
     try {
         const missingFields = []
-        requiredPersonFields.map(field => {
+        requiredPersonFields.forEach(field => {
             if (!(req.body.person || {})[field.key]) {
+                missingFields.push(field.name)
+            }
+        })
+        requiredFields.forEach(field => {
+            if (!(req.person || {})[field.key]) {
                 missingFields.push(field.name)
             }
         })
@@ -27,9 +39,9 @@ exports.create = async (req, res, next) => {
             return
         }
         const { person = {} } = req.body
-        const customer = {
-            has_books: false,
-            debt: 0,
+        const employee = {
+            username: req.body.username,
+            password: req.body.password,
             person: {
                 name: person.name,
                 lastname: person.lastname,
@@ -38,12 +50,12 @@ exports.create = async (req, res, next) => {
                 address: person.address,
             },
         }
-        const data = await Customer.create(customer, { include: Person })
-        res.send({ customer: data, success: true })
+        const data = await Employee.create(employee, { include: Person })
+        res.send({ employee: data, success: true })
     } catch (err) {
         res.status(500).send({
             message:
-                err.message || "Ocurrió un error al intentar registrar el cliente"
+                err.message || "Ocurrió un error al intentar registrar el usuario"
         });
         next(err)
     }
@@ -51,53 +63,38 @@ exports.create = async (req, res, next) => {
     return
 };
 
-// Trae todos los clientes de la base de datos
-exports.findAll = async (req, res, next) => {
-    try {
-        const data = await Customer.findAll({ include: Person })
-        res.send({ customers: data, success: true })
-    }
-    catch (err) {
-        res.status(500).send({
-            message:
-                err.message || "Ocurrió un error al intentar ver los clientes"
-        });
-        next(err)
-    }
-    return
-};
 
-//Encuentra un cliente usando su id como referencia
+//Encuentra un usuario usando su id como referencia
 exports.findOne = async (req, res, next) => {
     try {
         const id = req.params.id
-        const data = await Customer.findByPk(id, { include: Person })
-        if (data) res.send({ customer: data, success: true })
+        const data = await Employee.findByPk(id, { include: Person })
+        if (data) res.send({ employee: data, success: true })
         else {
             res.status(404).send({
-                message: `No se encontró el cliente con id: ${id}`
+                message: `No se encontró el usuario con id: ${id}`
             });
         }
     } catch (err) {
         res.status(404).send({
-            message: err.message || "Ocurrió un error al intentar ver el cliente"
+            message: err.message || "Ocurrió un error al intentar ver el usuario"
         });
         next(err)
     }
     return
 };
 
-//Actualizar el cliente usando su id como referencia
+//Actualizar el usuario usando su id como referencia
 exports.update = async (req, res) => {
     const id = req.params.id
     try {
-        const currentCustomer = await Customer.findByPk(id, { include: Person })
-        await Person.update(req.body.person, { where: { id: currentCustomer.personId } })
-        await currentCustomer.update(req.body, { where: { id } })
-        res.send(currentCustomer)
+        const currentEmployee = await Employee.findByPk(id, { include: Person })
+        await Person.update(req.body.person, { where: { id: currentEmployee.personId } })
+        await currentEmployee.update(req.body, { where: { id } })
+        res.send(currentEmployee)
     } catch (err) {
         res.status(500).send({
-            message: `Ocurrió un error al intentar actualizar el libro con id: ${id}`, log: err.message
+            message: `Ocurrió un error al intentar actualizar el usuario con id: ${id}`, log: err.message
         })
     }
 };

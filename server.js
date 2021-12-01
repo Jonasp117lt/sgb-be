@@ -1,11 +1,16 @@
 const express = require("express");
 const cors = require("cors");
+const config = require("./app/config/config")
+const jwt = require("jsonwebtoken")
+const auth = require("./app/middleware/auth")
 
 const app = express();
 
 var corsOptions = {
   origin: "http://localhost:8081"
 };
+
+app.set('key', config.key)
 
 app.use(cors(corsOptions));
 
@@ -23,8 +28,13 @@ app.get("/", (req, res) => {
 const db = require("./app/models");
 db.sequelize.sync();
 
-require("./app/routes/book.routes")(app);
-require("./app/routes/customer.routes")(app);
+const protectedRoutes = auth(app)
+
+require("./app/routes/book.routes")(app, protectedRoutes);
+require("./app/routes/customer.routes")(app, protectedRoutes);
+require("./app/routes/loan.routes")(app, protectedRoutes);
+require("./app/routes/return.routes")(app, protectedRoutes);
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

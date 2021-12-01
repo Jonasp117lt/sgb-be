@@ -17,6 +17,6 @@ module.exports = (db) => {
     db.loans.hasMany(db.emails)
     db.emails.belongsTo(db.loans)
 
-    db.loans.hasMany(db.returns)
+    db.loans.hasOne(db.returns)
     db.returns.belongsTo(db.loans)
 };
