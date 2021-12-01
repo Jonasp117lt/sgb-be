@@ -5,14 +5,9 @@ const jwt = require("jsonwebtoken")
 const auth = require("./app/middleware/auth")
 
 const app = express();
-
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
-
 app.set('key', config.key)
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
