@@ -91,7 +91,7 @@ exports.update = async (req, res) => {
         const currentEmployee = await Employee.findByPk(id, { include: Person })
         await Person.update(req.body.person, { where: { id: currentEmployee.personId } })
         await currentEmployee.update(req.body, { where: { id } })
-        res.send(currentEmployee)
+        res.send({ employee: currentEmployee, success: true })
     } catch (err) {
         res.status(500).send({
             message: `Ocurrió un error al intentar actualizar el usuario con id: ${id}`, log: err.message
@@ -104,7 +104,7 @@ exports.delete = async (req, res, next) => {
     const id = req.params.id
     try {
         const num = await Customer.destroy({ where: { id } })
-        if (num == 1) res.send({ message: 'El cliente fue eliminado correctamente' })
+        if (num == 1) res.send({ message: 'El cliente fue eliminado correctamente', success: true })
         else res.send({ message: `No se pudo eliminar el cliente con id: ${id}` })
     } catch (err) {
         res.send({ message: `Ocurrió un error al intentar eliminar el cliente con id: ${id}` })

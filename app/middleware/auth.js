@@ -28,8 +28,6 @@ module.exports = (app) => {
     protectedRoutes.use((req, res, next) => {
         let token = req.headers['authorization'] || "";
         token = token.replace("Bearer ", "")
-        console.log(req.headers)
-        console.log(token)
 
         if (token) {
             jwt.verify(token, app.get('key'), (err, decoded) => {

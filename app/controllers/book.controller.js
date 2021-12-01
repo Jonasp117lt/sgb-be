@@ -70,7 +70,7 @@ exports.findOne = async (req, res, next) => {
         if (data) res.send({ book: data, success: true })
         else {
             res.status(404).send({
-                message: `No se encontró el libro con id: ${id}`
+                message: `No se encontró el libro con id: ${id}`,
             });
         }
     } catch (err) {
@@ -97,7 +97,7 @@ exports.update = async (req, res, next) => {
         }
         const num = await Book.update(body, { where: { id } })
         if (num == 1) {
-            res.send({ message: 'El libro se actualizó correctamente' })
+            res.send({ message: 'El libro se actualizó correctamente', success: true })
         } else {
             res.send({ message: `No se pudo actualizar el libro con id: ${id}` })
         }
@@ -117,7 +117,7 @@ exports.delete = async (req, res, next) => {
     try {
         const id = req.params.id
         const num = await Book.destroy({ where: { id } })
-        if (num == 1) res.send({ message: 'El libro fue eliminado correctamente' })
+        if (num == 1) res.send({ message: 'El libro fue eliminado correctamente', success: true })
         else res.send({ message: `No se pudo eliminar el libro con id: ${id}` })
     } catch (err) {
         res.send({ message: `Ocurrió un error al intentar eliminar el libro con id: ${id}`, err })
