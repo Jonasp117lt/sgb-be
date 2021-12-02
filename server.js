@@ -29,6 +29,7 @@ require("./app/routes/book.routes")(app, protectedRoutes);
 require("./app/routes/customer.routes")(app, protectedRoutes);
 require("./app/routes/loan.routes")(app, protectedRoutes);
 require("./app/routes/return.routes")(app, protectedRoutes);
+require("./app/routes/employee.routes")(app, protectedRoutes);
 
 
 // set port, listen for requests

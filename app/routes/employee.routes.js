@@ -7,7 +7,7 @@ module.exports = (app, protectedRoutes) => {
     router.post("/", employees.create);
 
     //Obtener todos los usuarios
-    router.get("/", employees.findAll);
+    // router.get("/", employees.findAll);
 
     //Obtener un solo usuario
     router.get("/:id", employees.findOne);

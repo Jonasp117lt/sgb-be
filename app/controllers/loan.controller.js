@@ -28,6 +28,7 @@ exports.create = async (req, res, next) => {
         }
         const bookIds = req.body.books.map(({ id }) => id)
         const books = await Book.findAll({ where: { id: { [Op.or]: bookIds } } })
+        await Book.decrement("inventory", { by: 1, where: { id: { [Op.or]: bookIds } } })
         const start_date = new Date(req.body.start_date)
         const end_date = new Date()
         end_date.setDate(start_date.getDate() + 7)

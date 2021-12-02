@@ -32,6 +32,9 @@ exports.create = async (req, res, next) => {
             date: req.body.date,
             loanId: loanId,
         })
+        const loan = await Loan.findByPk(loanId)
+        loan.active = false
+        await loan.save()
         res.send({ _return, success: true })
     } catch (err) {
         res.status(500).send({

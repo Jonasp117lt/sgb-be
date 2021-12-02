@@ -12,12 +12,11 @@ const requiredPersonFields = [
 const requiredFields = [
     { key: 'username', name: 'Nombre de usuario' },
     { key: 'password', name: 'Contraseña' },
-    { key: 'confirm_password', name: 'Contraseña repetida' },
-
 ]
 
 //Crear y guardar un nuevo cliente
 exports.create = async (req, res, next) => {
+    console.log(req.body)
     //Registrar primero a la persona
     try {
         const missingFields = []
@@ -27,14 +26,14 @@ exports.create = async (req, res, next) => {
             }
         })
         requiredFields.forEach(field => {
-            if (!(req.person || {})[field.key]) {
+            if (!(req.body || {})[field.key]) {
                 missingFields.push(field.name)
             }
         })
 
         if (missingFields.length) {
             res.status(400).send({
-                message: `Faltan los siguientes campos: ${missingFields.join(', ')}`, err
+                message: `Faltan los siguientes campos: ${missingFields.join(', ')}`
             });
             return
         }
